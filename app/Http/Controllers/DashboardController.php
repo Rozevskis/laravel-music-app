@@ -12,16 +12,20 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // $songs = Song::query()
-        // ->orderBy('title', 'desc')
-        // // ->paginate()
-        // ;
-        $songs = Song::all();
+        $user = auth()->user(); 
+        
         $playlists = Playlist::query()
+        ->with('songs') // Eager load songs to avoid N+1 problem
+        ->where('created_by', $user->id)
         ->orderBy('id', 'desc')
-        ->paginate(15)
-        ->where('created_by', request()->user()->id);
+        ->paginate(15);
 
+
+        // $songs = Song::all();
+        $songs = $playlists->isEmpty() ? collect() : $playlists->first()->songs;
+        
+
+        
         $user = auth()->user(); 
         
         return view('dashboard',  
