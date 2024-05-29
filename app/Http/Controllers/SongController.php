@@ -13,7 +13,10 @@ class SongController extends Controller
      */
     public function index()
     {
-        //
+        // $user = auth()->user(); 
+        // return view('dashboard',  compact('user'));
+
+
     }
 
     /**
