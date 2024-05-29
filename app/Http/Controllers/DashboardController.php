@@ -13,13 +13,25 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user(); 
+
+
+        
+        if(request()->has('search')){
+            $playlists = Playlist::query()
+            ->where('name', 'like', '%' . request()->get('search') . '%' )
+            ->with('songs') // Eager load songs to avoid N+1 problem
+            ->where('created_by', $user->id)
+            ->orderBy('id', 'desc')
+            ->paginate(15);
+
+        }else{
         
         $playlists = Playlist::query()
         ->with('songs') // Eager load songs to avoid N+1 problem
         ->where('created_by', $user->id)
         ->orderBy('id', 'desc')
         ->paginate(15);
-
+        }
 
         // $songs = Song::all();
         $songs = $playlists->isEmpty() ? collect() : $playlists->first()->songs;
