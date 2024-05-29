@@ -64,3 +64,21 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+
+Using the Relationship:
+You can now use the many-to-many relationship in your application. For example, to attach a song to a playlist, you can do the following in your controller or tinker:
+
+
+$playlist = Playlist::find(1); // Find a playlist by ID
+$song = Song::find(1); // Find a song by ID
+
+// Attach the song to the playlist
+$playlist->songs()->attach($song->id);
+
+// You can also detach or sync songs
+$playlist->songs()->detach($song->id);
+$playlist->songs()->sync([1, 2, 3]); // Sync with an array of song IDs
+This setup allows you to manage playlists and songs with a many-to-many relationship efficiently. The playlist_song pivot table will store the relationships between playlists and songs.
